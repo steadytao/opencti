@@ -17173,6 +17173,7 @@ export type Mutation = {
   fintelTemplateConfigurationImport?: Maybe<FintelTemplate>;
   fintelTemplateDelete?: Maybe<Scalars['ID']['output']>;
   fintelTemplateFieldPatch?: Maybe<FintelTemplate>;
+  fintelTemplateSetDefault?: Maybe<FintelTemplate>;
   formAdd?: Maybe<Form>;
   formDelete?: Maybe<Scalars['ID']['output']>;
   formFieldPatch?: Maybe<Form>;
@@ -18356,6 +18357,12 @@ export type MutationFintelTemplateDeleteArgs = {
 export type MutationFintelTemplateFieldPatchArgs = {
   id: Scalars['ID']['input'];
   input: Array<EditInput>;
+};
+
+
+export type MutationFintelTemplateSetDefaultArgs = {
+  id: Scalars['ID']['input'];
+  settingsType: Scalars['String']['input'];
 };
 
 
@@ -47627,6 +47634,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   fintelTemplateConfigurationImport?: Resolver<Maybe<ResolversTypes['FintelTemplate']>, ParentType, ContextType, RequireFields<MutationFintelTemplateConfigurationImportArgs, 'file'>>;
   fintelTemplateDelete?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType, RequireFields<MutationFintelTemplateDeleteArgs, 'id'>>;
   fintelTemplateFieldPatch?: Resolver<Maybe<ResolversTypes['FintelTemplate']>, ParentType, ContextType, RequireFields<MutationFintelTemplateFieldPatchArgs, 'id' | 'input'>>;
+  fintelTemplateSetDefault?: Resolver<Maybe<ResolversTypes['FintelTemplate']>, ParentType, ContextType, RequireFields<MutationFintelTemplateSetDefaultArgs, 'id' | 'settingsType'>>;
   formAdd?: Resolver<Maybe<ResolversTypes['Form']>, ParentType, ContextType, RequireFields<MutationFormAddArgs, 'input'>>;
   formDelete?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType, RequireFields<MutationFormDeleteArgs, 'id'>>;
   formFieldPatch?: Resolver<Maybe<ResolversTypes['Form']>, ParentType, ContextType, RequireFields<MutationFormFieldPatchArgs, 'id' | 'input'>>;
