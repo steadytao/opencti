@@ -97,6 +97,7 @@ const stixCoreObjectFileExportQuery = graphql`
         fintelTemplates {
           id
           name
+          default
         }
         filesFromTemplate(first: 500) {
           edges {
@@ -220,10 +221,13 @@ const StixCoreObjectFileExportComponent = ({
     })),
   });
 
-  const templateOptions: FieldOption[] = (stixCoreObject?.fintelTemplates ?? []).map((t) => ({
+  const templateOptions = (stixCoreObject?.fintelTemplates ?? []).map((t) => ({
     value: t.id,
     label: t.name,
+    isDefault: t.default,
   }));
+
+  const defaultTemplate = templateOptions.find((t) => t.isDefault);
 
   // Keep only active connectors.
   const activeConnectors: ConnectorOption[] = (connectorsForExport ?? [])
@@ -424,6 +428,7 @@ const StixCoreObjectFileExportComponent = ({
           connectors={activeConnectors}
           fileOptions={fileOptions}
           templates={templateOptions}
+          defaultTemplate={defaultTemplate}
           defaultFileMarkings={(stixCoreObject?.objectMarking ?? []).map((o) => ({
             value: o.id,
             label: getMainRepresentative(o),
