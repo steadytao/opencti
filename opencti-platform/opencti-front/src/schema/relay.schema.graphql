@@ -15740,6 +15740,7 @@ type FintelDesign implements BasicObject & InternalObject {
   gradiantFromColor: String
   gradiantToColor: String
   textColor: String
+  default: Boolean
 }
 
 input FintelDesignAddInput {
@@ -15749,6 +15750,7 @@ input FintelDesignAddInput {
   gradiantFromColor: String
   gradiantToColor: String
   textColor: String
+  default: Boolean
   file: Upload
 }
 

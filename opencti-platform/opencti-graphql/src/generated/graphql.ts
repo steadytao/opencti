@@ -9911,6 +9911,7 @@ export enum FilterOperator {
 
 export type FintelDesign = BasicObject & InternalObject & {
   __typename?: 'FintelDesign';
+  default?: Maybe<Scalars['Boolean']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   entity_type: Scalars['String']['output'];
   file_id?: Maybe<Scalars['String']['output']>;
@@ -9926,6 +9927,7 @@ export type FintelDesign = BasicObject & InternalObject & {
 };
 
 export type FintelDesignAddInput = {
+  default?: InputMaybe<Scalars['Boolean']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   file?: InputMaybe<Scalars['Upload']['input']>;
   gradiantFromColor?: InputMaybe<Scalars['String']['input']>;
@@ -45027,6 +45029,7 @@ export type FilterKeysSchemaResolvers<ContextType = any, ParentType extends Reso
 }>;
 
 export type FintelDesignResolvers<ContextType = any, ParentType extends ResolversParentTypes['FintelDesign'] = ResolversParentTypes['FintelDesign']> = ResolversObject<{
+  default?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   entity_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   file_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
