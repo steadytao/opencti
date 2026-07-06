@@ -6508,6 +6508,7 @@ export type CustomViewsEdge = {
 };
 
 export enum CustomViewsOrdering {
+  Default = 'default',
   Enabled = 'enabled',
   Name = 'name'
 }
