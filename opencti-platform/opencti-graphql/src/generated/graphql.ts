@@ -6443,14 +6443,13 @@ export type CurrentConnectorStatusInput = {
 export type CustomFieldDefinition = BasicObject & InternalObject & {
   __typename?: 'CustomFieldDefinition';
   created?: Maybe<Scalars['DateTime']['output']>;
-  default_value?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   entity_type: Scalars['String']['output'];
+  entity_type_settings?: Maybe<Array<CustomFieldEntityTypeSetting>>;
   entity_types?: Maybe<Array<Scalars['String']['output']>>;
   field_type: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   label: Scalars['String']['output'];
-  mandatory: Scalars['Boolean']['output'];
   max_value?: Maybe<Scalars['Int']['output']>;
   metrics?: Maybe<Array<Maybe<Metric>>>;
   min_value?: Maybe<Scalars['Int']['output']>;
@@ -6464,12 +6463,10 @@ export type CustomFieldDefinition = BasicObject & InternalObject & {
 
 export type CustomFieldDefinitionAddInput = {
   created?: InputMaybe<Scalars['DateTime']['input']>;
-  default_value?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   entity_types?: InputMaybe<Array<Scalars['String']['input']>>;
   field_type: Scalars['String']['input'];
   label: Scalars['String']['input'];
-  mandatory: Scalars['Boolean']['input'];
   max_value?: InputMaybe<Scalars['Int']['input']>;
   min_value?: InputMaybe<Scalars['Int']['input']>;
   multiple?: InputMaybe<Scalars['Boolean']['input']>;
@@ -6496,6 +6493,13 @@ export enum CustomFieldDefinitionsOrdering {
   Label = 'label',
   Name = 'name'
 }
+
+export type CustomFieldEntityTypeSetting = {
+  __typename?: 'CustomFieldEntityTypeSetting';
+  default_value?: Maybe<Scalars['String']['output']>;
+  entity_type: Scalars['String']['output'];
+  mandatory: Scalars['Boolean']['output'];
+};
 
 export type CustomFieldValue = {
   __typename?: 'CustomFieldValue';
@@ -17120,6 +17124,7 @@ export type Mutation = {
   customFieldDefinitionDelete?: Maybe<Scalars['ID']['output']>;
   customFieldDefinitionFieldPatch?: Maybe<CustomFieldDefinition>;
   customFieldDefinitionRemoveEntityType?: Maybe<CustomFieldDefinition>;
+  customFieldDefinitionUpdateEntityType?: Maybe<CustomFieldDefinition>;
   customViewAdd: CustomView;
   customViewConfigurationImport: CustomView;
   customViewDelete: Scalars['ID']['output'];
@@ -17958,8 +17963,10 @@ export type MutationCustomFieldDefinitionAddArgs = {
 
 
 export type MutationCustomFieldDefinitionAddEntityTypeArgs = {
+  default_value?: InputMaybe<Scalars['String']['input']>;
   entityType: Scalars['String']['input'];
   id: Scalars['ID']['input'];
+  mandatory: Scalars['Boolean']['input'];
 };
 
 
@@ -17977,6 +17984,14 @@ export type MutationCustomFieldDefinitionFieldPatchArgs = {
 export type MutationCustomFieldDefinitionRemoveEntityTypeArgs = {
   entityType: Scalars['String']['input'];
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationCustomFieldDefinitionUpdateEntityTypeArgs = {
+  default_value?: InputMaybe<Scalars['String']['input']>;
+  entityType: Scalars['String']['input'];
+  id: Scalars['ID']['input'];
+  mandatory: Scalars['Boolean']['input'];
 };
 
 
@@ -39701,6 +39716,7 @@ export type ResolversTypes = ResolversObject<{
   CustomFieldDefinitionConnection: ResolverTypeWrapper<CustomFieldDefinitionConnection>;
   CustomFieldDefinitionEdge: ResolverTypeWrapper<CustomFieldDefinitionEdge>;
   CustomFieldDefinitionsOrdering: CustomFieldDefinitionsOrdering;
+  CustomFieldEntityTypeSetting: ResolverTypeWrapper<CustomFieldEntityTypeSetting>;
   CustomFieldValue: ResolverTypeWrapper<CustomFieldValue>;
   CustomFieldValueAddInput: CustomFieldValueAddInput;
   CustomView: ResolverTypeWrapper<BasicStoreEntityCustomView>;
@@ -40820,6 +40836,7 @@ export type ResolversParentTypes = ResolversObject<{
   CustomFieldDefinitionAddInput: CustomFieldDefinitionAddInput;
   CustomFieldDefinitionConnection: CustomFieldDefinitionConnection;
   CustomFieldDefinitionEdge: CustomFieldDefinitionEdge;
+  CustomFieldEntityTypeSetting: CustomFieldEntityTypeSetting;
   CustomFieldValue: CustomFieldValue;
   CustomFieldValueAddInput: CustomFieldValueAddInput;
   CustomView: BasicStoreEntityCustomView;
@@ -43705,14 +43722,13 @@ export type CsvMapperTestResultResolvers<ContextType = any, ParentType extends R
 
 export type CustomFieldDefinitionResolvers<ContextType = any, ParentType extends ResolversParentTypes['CustomFieldDefinition'] = ResolversParentTypes['CustomFieldDefinition']> = ResolversObject<{
   created?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  default_value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   entity_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  entity_type_settings?: Resolver<Maybe<Array<ResolversTypes['CustomFieldEntityTypeSetting']>>, ParentType, ContextType>;
   entity_types?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   field_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  mandatory?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   max_value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   metrics?: Resolver<Maybe<Array<Maybe<ResolversTypes['Metric']>>>, ParentType, ContextType>;
   min_value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -43733,6 +43749,12 @@ export type CustomFieldDefinitionConnectionResolvers<ContextType = any, ParentTy
 export type CustomFieldDefinitionEdgeResolvers<ContextType = any, ParentType extends ResolversParentTypes['CustomFieldDefinitionEdge'] = ResolversParentTypes['CustomFieldDefinitionEdge']> = ResolversObject<{
   cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   node?: Resolver<ResolversTypes['CustomFieldDefinition'], ParentType, ContextType>;
+}>;
+
+export type CustomFieldEntityTypeSettingResolvers<ContextType = any, ParentType extends ResolversParentTypes['CustomFieldEntityTypeSetting'] = ResolversParentTypes['CustomFieldEntityTypeSetting']> = ResolversObject<{
+  default_value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  entity_type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  mandatory?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 }>;
 
 export type CustomFieldValueResolvers<ContextType = any, ParentType extends ResolversParentTypes['CustomFieldValue'] = ResolversParentTypes['CustomFieldValue']> = ResolversObject<{
@@ -47487,10 +47509,11 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   csvMapperFieldPatch?: Resolver<Maybe<ResolversTypes['CsvMapper']>, ParentType, ContextType, RequireFields<MutationCsvMapperFieldPatchArgs, 'id' | 'input'>>;
   csvMapperTest?: Resolver<Maybe<ResolversTypes['CsvMapperTestResult']>, ParentType, ContextType, RequireFields<MutationCsvMapperTestArgs, 'configuration' | 'file'>>;
   customFieldDefinitionAdd?: Resolver<Maybe<ResolversTypes['CustomFieldDefinition']>, ParentType, ContextType, RequireFields<MutationCustomFieldDefinitionAddArgs, 'input'>>;
-  customFieldDefinitionAddEntityType?: Resolver<Maybe<ResolversTypes['CustomFieldDefinition']>, ParentType, ContextType, RequireFields<MutationCustomFieldDefinitionAddEntityTypeArgs, 'entityType' | 'id'>>;
+  customFieldDefinitionAddEntityType?: Resolver<Maybe<ResolversTypes['CustomFieldDefinition']>, ParentType, ContextType, RequireFields<MutationCustomFieldDefinitionAddEntityTypeArgs, 'entityType' | 'id' | 'mandatory'>>;
   customFieldDefinitionDelete?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType, RequireFields<MutationCustomFieldDefinitionDeleteArgs, 'id'>>;
   customFieldDefinitionFieldPatch?: Resolver<Maybe<ResolversTypes['CustomFieldDefinition']>, ParentType, ContextType, RequireFields<MutationCustomFieldDefinitionFieldPatchArgs, 'id' | 'input'>>;
   customFieldDefinitionRemoveEntityType?: Resolver<Maybe<ResolversTypes['CustomFieldDefinition']>, ParentType, ContextType, RequireFields<MutationCustomFieldDefinitionRemoveEntityTypeArgs, 'entityType' | 'id'>>;
+  customFieldDefinitionUpdateEntityType?: Resolver<Maybe<ResolversTypes['CustomFieldDefinition']>, ParentType, ContextType, RequireFields<MutationCustomFieldDefinitionUpdateEntityTypeArgs, 'entityType' | 'id' | 'mandatory'>>;
   customViewAdd?: Resolver<ResolversTypes['CustomView'], ParentType, ContextType, RequireFields<MutationCustomViewAddArgs, 'input'>>;
   customViewConfigurationImport?: Resolver<ResolversTypes['CustomView'], ParentType, ContextType, RequireFields<MutationCustomViewConfigurationImportArgs, 'file' | 'targetEntityType'>>;
   customViewDelete?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationCustomViewDeleteArgs, 'id'>>;
@@ -53413,6 +53436,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   CustomFieldDefinition?: CustomFieldDefinitionResolvers<ContextType>;
   CustomFieldDefinitionConnection?: CustomFieldDefinitionConnectionResolvers<ContextType>;
   CustomFieldDefinitionEdge?: CustomFieldDefinitionEdgeResolvers<ContextType>;
+  CustomFieldEntityTypeSetting?: CustomFieldEntityTypeSettingResolvers<ContextType>;
   CustomFieldValue?: CustomFieldValueResolvers<ContextType>;
   CustomView?: CustomViewResolvers<ContextType>;
   CustomViewsConnection?: CustomViewsConnectionResolvers<ContextType>;
