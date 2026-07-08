@@ -24678,6 +24678,7 @@ export type Query = {
   ruleManagerInfo?: Maybe<RuleManager>;
   rules?: Maybe<Array<Maybe<Rule>>>;
   runtimeAttributes?: Maybe<AttributeConnection>;
+  savedFilter?: Maybe<SavedFilter>;
   savedFilters?: Maybe<SavedFilterConnection>;
   schemaAttributeNames?: Maybe<AttributeConnection>;
   schemaAttributes?: Maybe<Array<Maybe<AttributesMap>>>;
@@ -26792,6 +26793,11 @@ export type QueryRuntimeAttributesArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   orderMode?: InputMaybe<OrderingMode>;
   search?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QuerySavedFilterArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -49644,6 +49650,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   ruleManagerInfo?: Resolver<Maybe<ResolversTypes['RuleManager']>, ParentType, ContextType>;
   rules?: Resolver<Maybe<Array<Maybe<ResolversTypes['Rule']>>>, ParentType, ContextType>;
   runtimeAttributes?: Resolver<Maybe<ResolversTypes['AttributeConnection']>, ParentType, ContextType, RequireFields<QueryRuntimeAttributesArgs, 'attributeName'>>;
+  savedFilter?: Resolver<Maybe<ResolversTypes['SavedFilter']>, ParentType, ContextType, RequireFields<QuerySavedFilterArgs, 'id'>>;
   savedFilters?: Resolver<Maybe<ResolversTypes['SavedFilterConnection']>, ParentType, ContextType, Partial<QuerySavedFiltersArgs>>;
   schemaAttributeNames?: Resolver<Maybe<ResolversTypes['AttributeConnection']>, ParentType, ContextType, RequireFields<QuerySchemaAttributeNamesArgs, 'elementType'>>;
   schemaAttributes?: Resolver<Maybe<Array<Maybe<ResolversTypes['AttributesMap']>>>, ParentType, ContextType>;
