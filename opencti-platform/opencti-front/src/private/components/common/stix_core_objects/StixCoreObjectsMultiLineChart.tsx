@@ -9,6 +9,7 @@ import WidgetMultiLines from '../../../../components/dashboard/WidgetMultiLines'
 import Loader, { LoaderVariant } from '../../../../components/Loader';
 import useDashboardViz from '../../../../components/dashboard/useDashboardViz';
 import WidgetNoHostEntity from '../../../../components/dashboard/WidgetNoHostEntity';
+import WidgetNoSavedFilters from 'src/components/dashboard/WidgetNoSavedFilters';
 import { Widget, WidgetDataSelection, WidgetHost } from '../../../../utils/widget/widget';
 import { DashboardConfig } from '../../../../components/dashboard/dashboard-types';
 import { StixCoreObjectsMultiLineChartTimeSeriesQuery } from './__generated__/StixCoreObjectsMultiLineChartTimeSeriesQuery.graphql';
@@ -134,7 +135,7 @@ const StixCoreObjectsMultiLineChart = ({
   host,
 }: StixCoreObjectsMultiLineChartProps) => {
   const { t_i18n } = useFormatter();
-  const { resolvedDataSelection, isMissingHostEntity, isPreviewMode, queryRef } = useDashboardViz<StixCoreObjectsMultiLineChartTimeSeriesQuery>({
+  const { resolvedDataSelection, isMissingHostEntity, isMissingSavedFilters, isPreviewMode, queryRef } = useDashboardViz<StixCoreObjectsMultiLineChartTimeSeriesQuery>({
     perspective: 'entities',
     dataSelection,
     host,
@@ -147,6 +148,10 @@ const StixCoreObjectsMultiLineChart = ({
   const renderContent = () => {
     if (isMissingHostEntity) {
       return <WidgetNoHostEntity host={host} />;
+    }
+
+    if (isMissingSavedFilters) {
+      return <WidgetNoSavedFilters />;
     }
 
     if (!queryRef) return null;

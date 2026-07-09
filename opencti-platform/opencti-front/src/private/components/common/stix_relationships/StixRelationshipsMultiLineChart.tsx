@@ -9,6 +9,7 @@ import WidgetMultiLines from '../../../../components/dashboard/WidgetMultiLines'
 import Loader, { LoaderVariant } from '../../../../components/Loader';
 import useDashboardViz from '../../../../components/dashboard/useDashboardViz';
 import WidgetNoHostEntity from '../../../../components/dashboard/WidgetNoHostEntity';
+import WidgetNoSavedFilters from 'src/components/dashboard/WidgetNoSavedFilters';
 import { StixRelationshipsMultiLineChartTimeSeriesQuery } from '@components/common/stix_relationships/__generated__/StixRelationshipsMultiLineChartTimeSeriesQuery.graphql';
 import { WidgetDataSelection, WidgetHost, WidgetParameters } from '../../../../utils/widget/widget';
 import { DashboardConfig } from '../../../../components/dashboard/dashboard-types';
@@ -141,7 +142,7 @@ const StixRelationshipsMultiLineChart = ({
 }: StixRelationshipsMultiLineChartProps) => {
   const { t_i18n } = useFormatter();
   const [chart, setChart] = useState<ApexCharts>();
-  const { resolvedDataSelection, isMissingHostEntity, isPreviewMode, queryRef } = useDashboardViz<StixRelationshipsMultiLineChartTimeSeriesQuery>({
+  const { resolvedDataSelection, isMissingHostEntity, isMissingSavedFilters, isPreviewMode, queryRef } = useDashboardViz<StixRelationshipsMultiLineChartTimeSeriesQuery>({
     perspective: 'relationships',
     dataSelection,
     host,
@@ -154,6 +155,10 @@ const StixRelationshipsMultiLineChart = ({
   const renderContent = () => {
     if (isMissingHostEntity) {
       return <WidgetNoHostEntity host={host} />;
+    }
+
+    if (isMissingSavedFilters) {
+      return <WidgetNoSavedFilters />;
     }
 
     if (!queryRef) {

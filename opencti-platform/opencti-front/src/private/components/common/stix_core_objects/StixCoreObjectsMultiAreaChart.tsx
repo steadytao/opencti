@@ -9,6 +9,7 @@ import WidgetMultiAreas from '../../../../components/dashboard/WidgetMultiAreas'
 import Loader, { LoaderVariant } from '../../../../components/Loader';
 import useDashboardViz from '../../../../components/dashboard/useDashboardViz';
 import WidgetNoHostEntity from '../../../../components/dashboard/WidgetNoHostEntity';
+import WidgetNoSavedFilters from 'src/components/dashboard/WidgetNoSavedFilters';
 import { Widget, WidgetDataSelection, WidgetHost } from '../../../../utils/widget/widget';
 import { DashboardConfig } from '../../../../components/dashboard/dashboard-types';
 import { StixCoreObjectsMultiAreaChartTimeSeriesQuery } from '@components/common/stix_core_objects/__generated__/StixCoreObjectsMultiAreaChartTimeSeriesQuery.graphql';
@@ -137,7 +138,7 @@ const StixCoreObjectsMultiAreaChart = ({
   host,
 }: StixCoreObjectsMultiAreaChartProps) => {
   const { t_i18n } = useFormatter();
-  const { resolvedDataSelection, isMissingHostEntity, isPreviewMode, queryRef } = useDashboardViz<StixCoreObjectsMultiAreaChartTimeSeriesQuery>({
+  const { resolvedDataSelection, isMissingHostEntity, isMissingSavedFilters, isPreviewMode, queryRef } = useDashboardViz<StixCoreObjectsMultiAreaChartTimeSeriesQuery>({
     perspective: 'entities',
     dataSelection,
     host,
@@ -150,6 +151,10 @@ const StixCoreObjectsMultiAreaChart = ({
   const renderContent = () => {
     if (isMissingHostEntity) {
       return <WidgetNoHostEntity host={host} />;
+    }
+
+    if (isMissingSavedFilters) {
+      return <WidgetNoSavedFilters />;
     }
 
     if (!queryRef) return null;

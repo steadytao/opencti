@@ -38,6 +38,7 @@ const useDashboardViz = <TQuery extends OperationType>({
   const [resolvedDataSelection, setResolvedDataSelection] = useState<WidgetDataSelection[]>([]);
   const [isMissingHostEntity, setIsMissingHostEntity] = useState(false);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [isMissingSavedFilters, setIsMissingSavedFilters] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -52,6 +53,7 @@ const useDashboardViz = <TQuery extends OperationType>({
         setResolvedDataSelection(result.resolvedDataSelection);
         setIsMissingHostEntity(result.isMissingHostEntity);
         setIsPreviewMode(result.isPreviewMode);
+        setIsMissingSavedFilters(result.isMissingSavedFilters);
       }
     });
     return () => {
@@ -85,6 +87,10 @@ const useDashboardViz = <TQuery extends OperationType>({
       return;
     }
 
+    if (isMissingSavedFilters) {
+      return;
+    }
+
     if (!queryVariables || !queryVariablesSignature) {
       return;
     }
@@ -94,15 +100,15 @@ const useDashboardViz = <TQuery extends OperationType>({
     }
 
     loadAndTrackSignature(queryVariables, queryVariablesSignature);
-  }, [isMissingHostEntity, queryVariables, queryVariablesSignature, loadAndTrackSignature]);
+  }, [isMissingHostEntity, isMissingSavedFilters, queryVariables, queryVariablesSignature, loadAndTrackSignature]);
 
   useEffect(() => {
-    if (!isMissingHostEntity) {
+    if (!isMissingHostEntity || !isMissingSavedFilters) {
       return;
     }
     lastLoadedVariablesSignatureRef.current = null;
     disposeQuery();
-  }, [disposeQuery, isMissingHostEntity]);
+  }, [disposeQuery, isMissingHostEntity, isMissingSavedFilters]);
 
   useEffect(() => {
     reloadData(false);
@@ -140,18 +146,19 @@ const useDashboardViz = <TQuery extends OperationType>({
     if (prevRefreshTokenRef.current === refreshToken) return;
     prevRefreshTokenRef.current = refreshToken;
 
-    if (isMissingHostEntity) {
+    if (isMissingHostEntity || isMissingSavedFilters) {
       return;
     }
 
     forceReloadWithFreshVariables();
-  }, [refreshToken, isMissingHostEntity, forceReloadWithFreshVariables]);
+  }, [refreshToken, isMissingHostEntity, isMissingSavedFilters, forceReloadWithFreshVariables]);
 
   return {
     queryRef,
     isPreviewMode,
     resolvedDataSelection,
     isMissingHostEntity,
+    isMissingSavedFilters,
   };
 };
 
