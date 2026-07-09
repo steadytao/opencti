@@ -127,4 +127,8 @@ const Tag = ({
   );
 };
 
+type LabelTagProps = Omit<TagProps, 'labelTextTransform'>;
+
+export const LabelTag = (props: LabelTagProps) => <Tag {...props} labelTextTransform="none" />;
+
 export default Tag;

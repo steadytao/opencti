@@ -1,4 +1,4 @@
-import Tag from '@common/tag/Tag';
+import Tag, { LabelTag } from '@common/tag/Tag';
 import { Box, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import React, { SyntheticEvent } from 'react';
@@ -33,7 +33,7 @@ const StixCoreObjectLabels = ({
   // case Revoked
   if (revoked) {
     return (
-      <Tag
+      <LabelTag
         variant="outlined"
         label={t_i18n('Revoked')}
         onClick={(e: SyntheticEvent) => {
@@ -73,7 +73,7 @@ const StixCoreObjectLabels = ({
                 chipRefs.current[index] = el;
               }}
             >
-              <Tag label={label.value || EMPTY_VALUE} />
+              <LabelTag label={label.value || EMPTY_VALUE} />
             </div>
           ))}
         </Stack>
@@ -82,7 +82,7 @@ const StixCoreObjectLabels = ({
         <Stack direction="row" gap={1} overflow="hidden" flex={1}>
           {labels.slice(0, visibleCount).map((label) => (
             <Box key={label.id} sx={{ minWidth: 0 }}>
-              <Tag
+              <LabelTag
                 label={label.value || ''}
                 color={label.color || ''}
                 onClick={(e: React.MouseEvent) => {
