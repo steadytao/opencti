@@ -123,7 +123,7 @@ const ObjectLabelField: FunctionComponent<ObjectLabelFieldProps> = ({
           if (data.labelAdd) {
             setFieldValue?.(name, [
               ...(values ?? []),
-              { label: data.labelAdd.value ?? '', value: data.labelAdd.id },
+              { label: data.labelAdd.value ?? '', value: data.labelAdd.id, color: data.labelAdd.color ?? undefined },
             ]);
           }
         }}
