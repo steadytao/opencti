@@ -1,11 +1,12 @@
 import type { WidgetDataSelection, WidgetPerspective, WidgetHost, WidgetParameters } from '../../utils/widget/widget';
-import { useCallback, useEffect, useMemo, useRef, useTransition } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useDashboardRefreshToken, useDashboardSetQueryPending } from './DashboardRefreshContext';
 import { DashboardConfig } from './dashboard-types';
 import { GraphQLTaggedNode } from 'relay-runtime/lib/query/RelayModernGraphQLTag';
 import { useQueryLoader } from 'react-relay';
 import { OperationType } from 'relay-runtime';
-import useResolveDataSelection from './useResolveDataSelection';
+import useAuth from '../../utils/hooks/useAuth';
+import { resolveDataSelection } from './dashboardVizUtils';
 
 const useDashboardViz = <TQuery extends OperationType>({
   dataSelection,
@@ -33,11 +34,36 @@ const useDashboardViz = <TQuery extends OperationType>({
   const setQueryPending = useDashboardSetQueryPending();
   const queryIdRef = useRef(`dashboard-viz-${Math.random().toString(36).slice(2)}`);
 
-  const { resolvedDataSelection, isMissingHostEntity, isPreviewMode, isMissingSavedFilters } = useResolveDataSelection({
-    dataSelection,
-    perspective,
-    host,
-  });
+  // Resolve data selection
+  const { filterKeysSchema } = useAuth().schema;
+  const [resolvedDataSelection, setResolvedDataSelection] = useState<WidgetDataSelection[]>([]);
+  const [isMissingHostEntity, setIsMissingHostEntity] = useState(false);
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [isMissingSavedFilters, setIsMissingSavedFilters] = useState(false);
+
+  // Stabilize the dataSelection dependency to avoid re-triggering the effect
+  // on every render when the parent passes a new array reference with the same content.
+  const dataSelectionSignature = useMemo(() => JSON.stringify(dataSelection), [dataSelection]);
+
+  useEffect(() => {
+    let cancelled = false;
+    resolveDataSelection({
+      filterKeysSchema,
+      dataSelection,
+      perspective,
+      host,
+    }).then((result) => {
+      if (!cancelled) {
+        setResolvedDataSelection(result.resolvedDataSelection);
+        setIsMissingHostEntity(result.isMissingHostEntity);
+        setIsPreviewMode(result.isPreviewMode);
+        setIsMissingSavedFilters(result.isMissingSavedFilters);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [filterKeysSchema, dataSelectionSignature, perspective, host]);
 
   const queryVariables = useMemo(
     () => (buildQueryVariables && config && resolvedDataSelection.length > 0
