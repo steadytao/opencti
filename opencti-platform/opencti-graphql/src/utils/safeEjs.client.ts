@@ -1,5 +1,5 @@
 import { Worker } from 'worker_threads';
-import * as path from 'path';
+import { fileURLToPath } from 'node:url';
 import type { Data } from 'ejs';
 import type { SafeRenderOptions } from './safeEjs';
 import type { WorkerReply } from './safeEjs.worker';
@@ -26,15 +26,15 @@ export const safeRender = async (template: string, data: Data, options?: SafeRen
   // Determine the correct worker path based on the environment
   let workerPath: string;
 
-  if (__filename.endsWith('.js')) {
+  if (import.meta.url.endsWith('.mjs')) {
     // Production: running from build directory
     // The worker is built to build/safeEjs.worker.js (at the root of build)
-    workerPath = path.join(__dirname, 'safeEjs.worker.js');
+    workerPath = fileURLToPath(new URL('safeEjs.worker.mjs', import.meta.url));
   } else {
     // Development/Test: running from source directory (src/utils/)
     // The worker is built to opencti-graphql/build/safeEjs.worker.js
     // From src/utils, go up to opencti-graphql root, then into build
-    workerPath = path.join(__dirname, '..', '..', 'build', 'safeEjs.worker.js');
+    workerPath = fileURLToPath(new URL('../../build/safeEjs.worker.mjs', import.meta.url));
   }
 
   // Handle escape function - remove it from options if it exists (can't be serialized)

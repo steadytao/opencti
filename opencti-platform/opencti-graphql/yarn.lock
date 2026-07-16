@@ -9581,16 +9581,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-calls-python@patch:node-calls-python@1.12.0#./patch/node-calls-python.patch::locator=opencti-graphql%40workspace%3A.":
-  version: 1.12.0
-  resolution: "node-calls-python@patch:node-calls-python@npm%3A1.12.0#./patch/node-calls-python.patch::version=1.12.0&hash=13bcc5&locator=opencti-graphql%40workspace%3A."
-  dependencies:
-    chokidar: "npm:^3.6.0"
-    node-gyp: "npm:latest"
-  checksum: 10c0/7d522bdaf459d7d2b32279929cc986ac8c7a3956f17904151ec941209946508f3c0140abeb0203fe6d260ac73b90c219cbf4276a28262628b7981d6501dd6541
-  languageName: node
-  linkType: hard
-
 "node-domexception@npm:^1.0.0":
   version: 1.0.0
   resolution: "node-domexception@npm:1.0.0"
@@ -10199,16 +10189,20 @@ __metadata:
     xml2js: "npm:0.6.2"
     zod: "npm:4.4.3"
   dependenciesMeta:
+    "@apollo/protobufjs":
+      built: false
+    "@datadog/pprof":
+      built: false
     es5-ext:
       built: false
     esbuild:
       built: false
     node-calls-python:
       built: true
-    protobufjs:
-      built: false
     re2:
       built: true
+    unrs-resolver:
+      built: false
   languageName: unknown
   linkType: soft
 

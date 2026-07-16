@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import * as path from 'path';
+import { fileURLToPath } from 'node:url';
 
 export type ConnectorType = 'INTERNAL_ENRICHMENT' | 'EXTERNAL_IMPORT' | 'INTERNAL_EXPORT_FILE' | 'INTERNAL_IMPORT_FILE';
 
@@ -59,7 +59,7 @@ class CatalogHelper {
   private catalog: Catalog;
 
   constructor() {
-    const catalogPath = path.join(__dirname, 'opencti-manifest.json');
+    const catalogPath = fileURLToPath(new URL('opencti-manifest.json', import.meta.url));
     const catalogContent = fs.readFileSync(catalogPath, 'utf8');
     this.catalog = JSON.parse(catalogContent);
   }

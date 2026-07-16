@@ -1,10 +1,9 @@
 import path from 'node:path';
 import { defineConfig } from 'vitest/config';
 import graphql from '@rollup/plugin-graphql';
-import type { PluginOption } from 'vite';
 
 export const buildTestConfig = (include: string[]) => defineConfig({
-  plugins: [graphql() as PluginOption],
+  plugins: [graphql()],
   test: {
     dir: './tests',
     include,
@@ -13,8 +12,8 @@ export const buildTestConfig = (include: string[]) => defineConfig({
     setupFiles: [],
     coverage: {
       provider: 'v8',
-      include: ['src/**'],
-      exclude: ['src/generated/**', 'src/migrations/**', 'src/stixpattern/**', 'src/python/**', '*.md'],
+      include: ['src/**/*.{ts,js}'],
+      exclude: ['src/generated/**', 'src/migrations/**', 'src/stixpattern/**', 'src/python/**'],
       reporter: ['text', 'json', 'html'],
       clean: false,
     },

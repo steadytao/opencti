@@ -1,6 +1,5 @@
-import { getDirective, MapperKind, mapSchema } from '@graphql-tools/utils';
-import { defaultFieldResolver } from 'graphql';
-import type { GraphQLFieldConfig, GraphQLSchema } from 'graphql';
+import { defaultFieldResolver, getDirectiveValues, isObjectType } from 'graphql';
+import type { GraphQLSchema } from 'graphql';
 import { ForbiddenAccess } from '../config/errors';
 import type { AuthContext } from '../types/user';
 import { isFeatureEnabled } from '../config/conf';
@@ -35,32 +34,34 @@ interface FeatureFlagDirectiveArgs {
 const FF_DIRECTIVE = 'ff';
 
 export const makeFeatureFlagDirectiveTransformer = (): (schema: GraphQLSchema) => GraphQLSchema => {
-  return (schema: GraphQLSchema) => mapSchema(schema, {
-    [MapperKind.OBJECT_FIELD]: (fieldConfig: GraphQLFieldConfig<any, any>, _fieldName: string) => {
-      const directive = getDirective(schema, fieldConfig, FF_DIRECTIVE);
-      const ffDirective = directive?.[0] as FeatureFlagDirectiveArgs | undefined;
+  return (schema: GraphQLSchema) => {
+    const ffDirectiveDef = schema.getDirective(FF_DIRECTIVE);
+    if (!ffDirectiveDef) return schema;
 
-      if (!ffDirective) {
-        return fieldConfig;
-      }
+    for (const type of Object.values(schema.getTypeMap())) {
+      if (!isObjectType(type)) continue;
 
-      const { flags, softFail, defaultValue } = ffDirective;
-      if (!flags) {
-        return fieldConfig;
-      }
+      for (const field of Object.values(type.getFields())) {
+        if (!field.astNode) continue;
 
-      const { resolve = defaultFieldResolver } = fieldConfig;
-      fieldConfig.resolve = (source: any, args: any, context: AuthContext, info: any) => {
-        if (!flags.some((flag) => isFeatureEnabled(flag))) {
-          if (softFail) {
-            return defaultValue ? JSON.parse(defaultValue) : null;
-          } else {
-            throw ForbiddenAccess('Feature is disabled', { flags });
+        const ffDirective = getDirectiveValues(ffDirectiveDef, field.astNode) as FeatureFlagDirectiveArgs | undefined;
+        if (!ffDirective?.flags) continue;
+
+        const { flags, softFail, defaultValue } = ffDirective;
+        const { resolve = defaultFieldResolver } = field;
+        field.resolve = (source: any, args: any, context: AuthContext, info: any) => {
+          if (!flags.some((flag) => isFeatureEnabled(flag))) {
+            if (softFail) {
+              return defaultValue ? JSON.parse(defaultValue) : null;
+            } else {
+              throw ForbiddenAccess('Feature is disabled', { flags });
+            }
           }
-        }
-        return resolve(source, args, context, info);
-      };
-      return fieldConfig;
-    },
-  });
+          return resolve(source, args, context, info);
+        };
+      }
+    }
+
+    return schema;
+  };
 };

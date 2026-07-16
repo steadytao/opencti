@@ -1,10 +1,9 @@
 import { defineConfig } from 'vitest/config';
 import graphql from '@rollup/plugin-graphql';
-import type { PluginOption } from 'vite';
 import { BaseSequencer, type TestSpecification } from 'vitest/node';
 
 export const buildIntegrationTestConfig = (include: string[]) => defineConfig({
-  plugins: [graphql() as PluginOption],
+  plugins: [graphql()],
   test: {
     dir: './tests',
     include,
