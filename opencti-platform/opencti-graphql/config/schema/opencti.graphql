@@ -14091,6 +14091,7 @@ union StixObjectOrStixRelationshipOrCreator =
   | IMSI
   | SavedFilter
   | Vocabulary
+  | DraftWorkspace
 union StixObjectOrStixRelationship =
   MarkingDefinition
   | Label
